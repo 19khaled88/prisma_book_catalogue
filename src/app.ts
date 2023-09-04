@@ -1,12 +1,9 @@
 import express from 'express'
-import userRoutes from './modules/users/routes'
+import UserRoutes from './modules/users/routes'
 const app = express()
 
 app.use(express.json())
 
-app.use("/api/v1",userRoutes)
-
+app.use('/api/v1',UserRoutes)
 
 export default app
-
-
