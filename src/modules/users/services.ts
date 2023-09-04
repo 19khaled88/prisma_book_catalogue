@@ -1,6 +1,8 @@
 import { PrismaClient, User } from "@prisma/client";
+import config from '../../config/index'
 import bcrypt from "bcrypt";
 import { signJwt } from "../../utils/token";
+import { Token } from "./interface";
 const prisma = new PrismaClient();
 
 const signUpServices = async (data: User) => {
@@ -12,7 +14,7 @@ const signUpServices = async (data: User) => {
 	return result;
 };
 
-const signInServices = async (data: Partial<User>): Promise<User | null> => {
+const signInServices = async (data: Partial<User>): Promise<Token | null> => {
 	const isExist = await prisma.user.findUnique({
 		where: {
 			email: data.email,
@@ -26,10 +28,12 @@ const signInServices = async (data: Partial<User>): Promise<User | null> => {
 	) {
 		const access_token = await signJwt(
 			{ role: isExist.role, userId: isExist.id },
-			"accessTokenPrivateKey"
+			"accessTokenPrivateKey",{
+        expiresIn:`${config.accessTokenExpiresIn}d`
+      }
 		);
 
-		return isExist;
+		return {token:access_token};
 	}
 
 	return null;
@@ -40,7 +44,7 @@ const getAllUsers = async (): Promise<User[]> => {
 	return result;
 };
 
-const getSinglUser = async (id: string): Promise<User | null> => {
+const getSingleUser = async (id: string): Promise<User | null> => {
 	const isExist = await prisma.user.findFirst({
 		where: {
 			id: id,
@@ -74,7 +78,7 @@ export const UserService = {
 	signUpServices,
 	signInServices,
 	getAllUsers,
-	getSinglUser,
+	getSingleUser,
 	deleteUser,
 	updateUser,
 };
