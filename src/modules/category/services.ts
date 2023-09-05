@@ -1,13 +1,24 @@
 import { Category, Prisma, PrismaClient } from "@prisma/client";
-import { NotFound } from "./interface";
+import { Exist, NotFound } from "./interface";
 
 const prisma = new PrismaClient();
 
-const categoryCreateService = async (data: Category): Promise<Category> => {
-	const result = await prisma.category.create({
-		data: data,
+const categoryCreateService = async (
+	data: Category
+): Promise<Category | Exist> => {
+	const isExist = await prisma.category.findFirst({
+		where: {
+			title: data.title,
+		},
 	});
-	return result;
+	if (isExist !== null) {
+		const result = await prisma.category.create({
+			data: data,
+		});
+		return result;
+	} else {
+		throw new Error("This category title already exist");
+	}
 };
 
 const allCategoryService = async (): Promise<Category[]> => {

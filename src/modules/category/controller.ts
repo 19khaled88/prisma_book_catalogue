@@ -4,13 +4,23 @@ import sendResponse from "../../shared/sendResponse";
 import httpStatus from "http-status";
 
 const categoryCreateController = async (req: Request, res: Response) => {
-	const result = await CategoryService.categoryCreateService(req.body);
+	try {
+		const result = await CategoryService.categoryCreateService(req.body);
 	sendResponse(res, {
 		statusCode: httpStatus.OK,
 		success: true,
 		message: "Category created successfuly",
 		data: result,
 	});
+	} catch (error) {
+		sendResponse(res, {
+			statusCode: httpStatus.BAD_REQUEST,
+			success: false,
+			message: "Category not created successfully",
+			data: error?.message,
+		});
+	}
+	
 };
 
 const allCategoryController = async (req: Request, res: Response) => {
