@@ -49,9 +49,31 @@ const getSingleUserController = async (req: Request, res: Response) => {
 	});
 };
 
+const updateUserController = async (req: Request, res: Response) => {
+	const isUpdate = await UserService.updateUser(req.params.id, req.body);
+	sendResponse(res, {
+		statusCode: httpStatus.OK,
+		success: true,
+		message: "User updated successfully",
+		data: isUpdate,
+	});
+};
+
+const deleteUserControler = async (req: Request, res: Response) => {
+	const isDeleted = await UserService.deleteUser(req.params.id);
+	sendResponse(res, {
+		statusCode: httpStatus.OK,
+		success: true,
+		message: "Uers deleted successfully",
+		data: isDeleted,
+	});
+};
+
 export const UserController = {
 	signUpController,
 	signInController,
 	getAllUsersController,
 	getSingleUserController,
+	updateUserController,
+    deleteUserControler
 };

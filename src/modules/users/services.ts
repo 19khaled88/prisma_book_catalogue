@@ -1,8 +1,8 @@
 import { PrismaClient, User } from "@prisma/client";
-import config from '../../config/index'
 import bcrypt from "bcrypt";
-import { signJwt } from "../../utils/token";
+import jwt from "jsonwebtoken";
 import { Token } from "./interface";
+import { signJwt } from "../../utils/token";
 const prisma = new PrismaClient();
 
 const signUpServices = async (data: User) => {
@@ -26,14 +26,12 @@ const signInServices = async (data: Partial<User>): Promise<Token | null> => {
 		data.password !== undefined &&
 		(await bcrypt.compare(data.password, isExist.password))
 	) {
-		const access_token = await signJwt(
+		const access_token = signJwt(
 			{ role: isExist.role, userId: isExist.id },
-			"accessTokenPrivateKey",{
-        expiresIn:`${config.accessTokenExpiresIn}d`
-      }
+			{ expiresIn: "2h" }
 		);
 
-		return {token:access_token};
+		return { token: access_token };
 	}
 
 	return null;
