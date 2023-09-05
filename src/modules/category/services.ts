@@ -1,0 +1,71 @@
+import { Category, Prisma, PrismaClient } from "@prisma/client";
+import { NotFound } from "./interface";
+
+const prisma = new PrismaClient();
+
+const categoryCreateService = async (data: Category): Promise<Category> => {
+	const result = await prisma.category.create({
+		data: data,
+	});
+	return result;
+};
+
+const allCategoryService = async (): Promise<Category[]> => {
+	const result = await prisma.category.findMany();
+	return result;
+};
+
+const singleCategoryService = async (id: string): Promise<Category> => {
+	const result = await prisma.category.findFirst({
+		where: {
+			id: id,
+		},
+		include: {
+			books: true,
+		},
+	});
+	return result;
+};
+
+const updateCategoryService = async (
+	id: string,
+	payload: Partial<Category>
+): Promise<Category> => {
+	const result = await prisma.category.update({
+		where: {
+			id: id,
+		},
+		data: payload,
+	});
+	return result;
+};
+
+const deleteCategoryService = async (
+	id: string
+): Promise<Category | NotFound> => {
+	try {
+		const result = await prisma.category.delete({
+			where: {
+				id: id,
+			},
+		});
+		return result;
+	} catch (error) {
+		if (
+			error instanceof Prisma.PrismaClientKnownRequestError &&
+			error.code === "P2025"
+		) {
+			throw new Error("No user found with this ID");
+		}
+	}
+
+	// return result
+};
+
+export const CategoryService = {
+	categoryCreateService,
+	allCategoryService,
+	singleCategoryService,
+	updateCategoryService,
+	deleteCategoryService,
+};
