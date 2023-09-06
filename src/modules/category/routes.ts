@@ -6,18 +6,18 @@ const router = express.Router();
 
 router.post(
 	"/categories/create-category",
-	authCheck,
+	authCheck('admin'),
 	CategoryController.categoryCreateController
 );
 router.get("/categories/:id", CategoryController.singleCategoryController);
 router.put(
 	"/categories/:id",
-	authCheck,
+	authCheck('admin'),
 	CategoryController.updateCategoryController
 );
 router.delete(
 	"/categories/:id",
-	authCheck,
+	authCheck('admin'),
 	CategoryController.deleteCategoryController
 );
 router.get("/categories", CategoryController.allCategoryController);

@@ -3,6 +3,7 @@ import { NotFound } from "../../shared/interface";
 import { Exist } from "../category/interface";
 
 const prisma = new PrismaClient();
+
 const createBookService = async (data: Book): Promise<Book |  undefined> => {
 	try {
 		const result = await prisma.book.create({
