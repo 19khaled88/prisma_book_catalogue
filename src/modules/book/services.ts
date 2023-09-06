@@ -1,8 +1,9 @@
 import { Book, Prisma, PrismaClient } from "@prisma/client";
 import { NotFound } from "../../shared/interface";
+import { Exist } from "../category/interface";
 
 const prisma = new PrismaClient();
-const createBookService = async (data: Book): Promise<Book> => {
+const createBookService = async (data: Book): Promise<Book |  undefined> => {
 	try {
 		const result = await prisma.book.create({
 			data: data,
@@ -10,7 +11,6 @@ const createBookService = async (data: Book): Promise<Book> => {
 				category: true,
 			},
 		});
-
 		return result;
 	} catch (error) {
 		if (
@@ -43,7 +43,7 @@ const singleBookService = async (id: string): Promise<Book | NotFound> => {
 const updateBookService = async (
 	id: string,
 	payload: Partial<Book>
-): Promise<Book | NotFound> => {
+): Promise<Book | undefined> => {
 	try {
 		const result = await prisma.book.update({
 			where: {
