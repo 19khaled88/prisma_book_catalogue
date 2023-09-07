@@ -25,26 +25,26 @@ import httpStatus from "http-status";
 // };
 
 const authCheck =
-  (...role: string[]) =>
-  (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const token = req.headers.authorization;
+	(...role: string[]) =>
+	(req: Request, res: Response, next: NextFunction) => {
+		try {
+			const token = req.headers.authorization;
 
-      if (!token) {
-        return res.status(403).send("A token is required for authentication");
-      }
+			if (!token) {
+				return res.status(403).send("A token is required for authentication");
+			}
 
-      const decoded:IAuthType = verifyJwt(token);
-      if(role.length && !role.includes(decoded.role)){
-		throw new Error('This user is not authorization')
-	  }
-        next();
-    } catch (error) {
-      if (error instanceof Error) {
-        return res
-          .status(httpStatus.FORBIDDEN)
-          .send({ Warning: error.message });
-      }
-    }
-  };
+			const decoded: IAuthType = verifyJwt(token);
+			if (role.length && !role.includes(decoded.role)) {
+				throw new Error("This user is not authorization");
+			}
+			next();
+		} catch (error) {
+			if (error instanceof Error) {
+				return res
+					.status(httpStatus.FORBIDDEN)
+					.send({ Warning: error.message });
+			}
+		}
+	};
 export default authCheck;

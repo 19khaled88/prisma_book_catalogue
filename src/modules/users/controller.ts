@@ -14,13 +14,31 @@ const signUpController = async (req: Request, res: Response) => {
 };
 
 const signInController = async (req: Request, res: Response) => {
-	const result = await UserService.signInServices(req.body);
-	res.send({
-		success: true,
-		statusCode: 200,
-		message: "User signin successfully",
-		token: result?.token,
-	});
+	try {
+		const result = await UserService.signInServices(req.body);
+		res.send({
+			success: true,
+			statusCode: 200,
+			message: "User signin successfully",
+			token: result?.token,
+		});
+	} catch (error) {
+		if (error instanceof Error) {
+			sendResponse(res, {
+				statusCode: httpStatus.UNAUTHORIZED,
+				success: false,
+				message: "User signin unsuccessful",
+				data:error.message
+			});
+		}else{
+			sendResponse(res, {
+				statusCode: httpStatus.UNAUTHORIZED,
+				success: false,
+				message: "User signin unsuccessful",
+				data:"unknow error"
+			});
+		}
+	}
 };
 
 const getAllUsersController = async (req: Request, res: Response) => {
@@ -69,5 +87,5 @@ export const UserController = {
 	getAllUsersController,
 	getSingleUserController,
 	updateUserController,
-    deleteUserControler
+	deleteUserControler,
 };

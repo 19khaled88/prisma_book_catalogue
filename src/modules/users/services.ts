@@ -1,8 +1,7 @@
 import { PrismaClient, User } from "@prisma/client";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import { Token } from "./interface";
 import { signJwt } from "../../utils/token";
+import { Token } from "./interface";
 const prisma = new PrismaClient();
 
 const signUpServices = async (data: User) => {
@@ -15,14 +14,13 @@ const signUpServices = async (data: User) => {
 };
 
 const signInServices = async (data: Partial<User>): Promise<Token | null> => {
-	const isExist = await prisma.user.findUnique({
+	const isExist = await prisma.user.findFirst({
 		where: {
 			email: data.email,
 		},
 	});
-
 	if (
-		isExist &&
+		isExist !== null &&
 		data.password !== undefined &&
 		(await bcrypt.compare(data.password, isExist.password))
 	) {
@@ -34,7 +32,7 @@ const signInServices = async (data: Partial<User>): Promise<Token | null> => {
 		return { token: access_token };
 	}
 
-	return null;
+	throw new Error('This user not found')
 };
 
 const getAllUsers = async (): Promise<User[]> => {
