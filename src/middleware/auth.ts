@@ -34,11 +34,13 @@ const authCheck =
         return res.status(403).send("A token is required for authentication");
       }
 
-      const decoded:IAuthType = verifyJwt(token);
-      if(role.length && !role.includes(decoded.role)){
-		throw new Error('This user is not authorization')
-	  }
-        next();
+      const decoded: IAuthType = verifyJwt(token);
+      if (role.length && !role.includes(decoded.role)) {
+        throw new Error("This user is not authorized");
+      }
+      req.userNeededId = decoded.userId
+      req.userRole = decoded.role
+      next();
     } catch (error) {
       if (error instanceof Error) {
         return res

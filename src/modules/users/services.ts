@@ -15,12 +15,14 @@ const signUpServices = async (data: User) => {
 };
 
 const signInServices = async (data: Partial<User>): Promise<Token | null> => {
-	const isExist = await prisma.user.findUnique({
+	const isExist = await prisma.user.findFirst({
 		where: {
 			email: data.email,
 		},
 	});
-
+    if(isExist === null){
+		throw new Error('This user does not exist')
+	}
 	if (
 		isExist &&
 		data.password !== undefined &&
