@@ -14,24 +14,31 @@ const signUpController = async (req: Request, res: Response) => {
 };
 
 const signInController = async (req: Request, res: Response) => {
-  try {
-    const result = await UserService.signInServices(req.body);
-    res.send({
-      success: true,
-      statusCode: 200,
-      message: "User signin successfully",
-      token: result?.token,
-    });
-  } catch (error) {
-	if(error instanceof Error){
-		sendResponse(res,{
-			statusCode:httpStatus.BAD_REQUEST,
-			success:false,
-			message:'User singin unsuccessful',
-			data:error.message
-		})
+	try {
+		const result = await UserService.signInServices(req.body);
+		res.send({
+			success: true,
+			statusCode: 200,
+			message: "User signin successfully",
+			token: result?.token,
+		});
+	} catch (error) {
+		if (error instanceof Error) {
+			sendResponse(res, {
+				statusCode: httpStatus.UNAUTHORIZED,
+				success: false,
+				message: "User signin unsuccessful",
+				data:error.message
+			});
+		}else{
+			sendResponse(res, {
+				statusCode: httpStatus.UNAUTHORIZED,
+				success: false,
+				message: "User signin unsuccessful",
+				data:"unknow error"
+			});
+		}
 	}
-  }
 };
 
 const getAllUsersController = async (req: Request, res: Response) => {
@@ -75,10 +82,10 @@ const deleteUserControler = async (req: Request, res: Response) => {
 };
 
 export const UserController = {
-  signUpController,
-  signInController,
-  getAllUsersController,
-  getSingleUserController,
-  updateUserController,
-  deleteUserControler,
+	signUpController,
+	signInController,
+	getAllUsersController,
+	getSingleUserController,
+	updateUserController,
+	deleteUserControler,
 };
