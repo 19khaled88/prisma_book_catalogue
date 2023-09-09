@@ -1,8 +1,8 @@
 import express, { Request, Response } from "express";
-import BookRoutes from "./modules/book/routes";
-import CategoryRoutes from "./modules/category/routes";
-import OrderRoutes from "./modules/order/routes";
-import UserRoutes from "./modules/users/routes";
+import BookRoutes from "./src/modules/book/routes";
+import CategoryRoutes from "./src/modules/category/routes";
+import OrderRoutes from "./src/modules/order/routes";
+import UserRoutes from "./src/modules/users/routes";
 const app = express();
 
 app.use(express.json());
