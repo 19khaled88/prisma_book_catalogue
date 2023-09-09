@@ -1,6 +1,7 @@
 import express from "express";
 import { UserController } from "./controller";
 import authCheck from "../../middleware/auth";
+
 const router = express.Router();
 
 router.post("/auth/signup", UserController.signUpController);

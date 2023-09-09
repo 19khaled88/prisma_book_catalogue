@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { verifyJwt } from "../utils/token";
-import { JsonWebTokenError, JwtPayload } from "jsonwebtoken";
-import { IAuthType, IGetUserAuthVerifiedRequest } from "../shared/interface";
+import { IAuthType } from "../shared/interface";
 import httpStatus from "http-status";
 
 // const authCheck = async (req: Request, res: Response, next: NextFunction) => {
@@ -29,7 +28,7 @@ const authCheck =
 	(req: Request, res: Response, next: NextFunction) => {
 		try {
 			const token = req.headers.authorization;
-
+      
 			if (!token) {
 				return res.status(403).send("A token is required for authentication");
 			}

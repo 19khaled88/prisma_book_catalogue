@@ -12,8 +12,8 @@ app.use("/api/v1", CategoryRoutes);
 app.use("/api/v1", BookRoutes);
 app.use("/api/v1", OrderRoutes);
 
-app.get("/test", (req: Request, res: Response) => {
-	res.send({ message: "successful" });
+app.get("/", (req: Request, res: Response) => {
+	res.send({ message: "Deployed successfully to Vercel" });
 });
 
 export default app;
