@@ -35,7 +35,21 @@ const allOrderService = (userId, role) => __awaiter(void 0, void 0, void 0, func
     }
     return result;
 });
+const singleOrderService = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma.order.findFirst({
+        where: {
+            id: id,
+        },
+    });
+    if (result !== null) {
+        return result;
+    }
+    else {
+        throw new Error("Orders not found for this ID");
+    }
+});
 exports.OrderSerivce = {
     createOrderService,
     allOrderService,
+    singleOrderService
 };

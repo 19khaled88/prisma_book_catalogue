@@ -34,7 +34,29 @@ const allOrderController = (req, res) => __awaiter(void 0, void 0, void 0, funct
         data: result,
     });
 });
+const singleOrdercontroller = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield services_1.OrderSerivce.singleOrderService(req.params.orderId);
+        (0, sendResponse_1.default)(res, {
+            statusCode: http_status_1.default.OK,
+            success: true,
+            message: "Order fetched successfully",
+            data: result,
+        });
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            (0, sendResponse_1.default)(res, {
+                statusCode: http_status_1.default.BAD_REQUEST,
+                success: false,
+                message: "Order not fetched successfully",
+                data: error.message,
+            });
+        }
+    }
+});
 exports.OrderController = {
     createOrderController,
     allOrderController,
+    singleOrdercontroller
 };

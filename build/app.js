@@ -14,7 +14,7 @@ app.use("/api/v1", routes_4.default);
 app.use("/api/v1", routes_2.default);
 app.use("/api/v1", routes_1.default);
 app.use("/api/v1", routes_3.default);
-app.get("/test", (req, res) => {
-    res.send({ message: "successful" });
+app.get("/", (req, res) => {
+    res.send({ message: "Deployed successfully to Vercel" });
 });
 exports.default = app;
