@@ -26,7 +26,21 @@ const allOrderService = async (userId: string, role: string) => {
   return result;
 };
 
+const singleOrderService = async (id: string) => {
+  const result = await prisma.order.findFirst({
+    where: {
+      id: id,
+    },
+  });
+  if (result !== null) {
+    return result;
+  } else {
+    throw new Error("Orders not found for this ID");
+  }
+};
+
 export const OrderSerivce = {
   createOrderService,
   allOrderService,
+  singleOrderService
 };
